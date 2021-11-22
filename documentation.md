@@ -56,7 +56,7 @@ Note: Make sure you installed the ff. requirements
 6. Returning Hello world using our Api
 	class HelloWorld(resource):
 		def get(self):
-			return {'message': 'hello world'}	# JSONs should be serializable
+			return {'message': 'hello world'}	# objects should be serializable (in JSON format)
 
 	api.add_resource(HelloWorld, '/')	# Registering it in our api, just like the django urls
 
@@ -70,3 +70,19 @@ Note: Make sure you installed the ff. requirements
 
 -After it, run the two pyfiles; the main.py and the test.py:
 	-you will see, our test.py wwill get what it want.
+-You can also use other request methods such as post or delete, just make sure you had a 
+function for that type of request method. To access other functions, replace/put the "get" 
+method in response = requests.get(BASE + 'helloworld') to another name of function.
+
+7. Putting parameters on our Api
+-Modify the get() and add some parameter:
+	def get(self,name,score):
+		return {'name': name, 'score': score}
+
+	-Replace api.add_resource(HelloWorld, '/helloworld') into:
+	api.add_resource(HelloWorld, '/helloworld/<string:name>/<int:score>')
+
+-Now lets add some name and int on the link we got on test.py:
+	response = requests.get(BASE + 'helloworld/agg/3')
+
+-If we try to run our test.py, it will get the name agg and the int 3 as its parameter
