@@ -4,19 +4,11 @@ from flask_restful import Api,Resource
 app = Flask(__name__)
 api = Api(app)
 
-db = {
-	"12": {
-			"task": "wash dishes"
-	},
-	"13": {
-		"task": "something else"
-	}
-}
+class HelloWorld(Resource):
+	def get(self):
+		return {'message': 'hello world'}
 
-@app.route('/get-todos')
-def getTodos():
-	return db
-
+api.add_resource(HelloWorld, '/helloworld')	# Registering it in our api, just like the django urls
 
 if __name__ == '__main__':
 	app.run(debug=True)
