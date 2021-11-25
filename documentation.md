@@ -74,6 +74,7 @@ Note: Make sure you installed the ff. requirements
 function for that type of request method. To access other functions, replace/put the "get" 
 method in response = requests.get(BASE + 'helloworld') to another name of function.
 
+
 7. Putting parameters on our Api
 -Modify the get() and add some parameter:
 	def get(self,name,score):
@@ -86,3 +87,12 @@ method in response = requests.get(BASE + 'helloworld') to another name of functi
 	response = requests.get(BASE + 'helloworld/agg/3')
 
 -If we try to run our test.py, it will get the name agg and the int 3 as its parameter
+
+
+8. Storing data through Api
+-Lets add requests on our api. Lets say on our test.py, where our actions are in, has 
+parameters. Take note; to put some argument on our request file test.py, simply:
+	response = requests.put(BASE + 'helloworld/Michael',{'subs': 1000})	# requests = argument
+
+-To access the request/arguments inside the engine, we need to use the 'request' from the 
+flask module. So import it: from flask import Flask,request

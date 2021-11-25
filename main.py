@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask,request
 from flask_restful import Api,Resource
 
 app = Flask(__name__)
@@ -8,6 +8,11 @@ peep = {
 	'Michael': {'age': 18, 'student': True},
 	'Tim': {'age': 25, 'student': False},
 }
+
+
+@app.route('/')
+def getTodos():
+	return(peep)
 
 class HelloWorld(Resource):
 	def get(self,name):
