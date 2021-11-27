@@ -9,6 +9,7 @@ peep = {
 	'Tim': {'age': 25, 'student': False},
 }
 
+vids = {}
 
 @app.route('/')
 def getTodos():
@@ -17,6 +18,10 @@ def getTodos():
 class HelloWorld(Resource):
 	def get(self,name):
 		return(peep[name])
+
+	def put(self,name):
+		print(request.form['subs'])
+		return {}
 
 # Registering it in our api, just like the django urls
 api.add_resource(HelloWorld, '/helloworld/<string:name>')

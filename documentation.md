@@ -96,3 +96,16 @@ parameters. Take note; to put some argument on our request file test.py, simply:
 
 -To access the request/arguments inside the engine, we need to use the 'request' from the 
 flask module. So import it: from flask import Flask,request
+
+-In order to get the requests, we are going to use the put() to get the json we sent. To see 
+if our Api works, try adding the ff. on your HelloWorld()/main.py:
+	def put(self,name):
+		print(request.form['subs'])
+		return {}
+
+-Then modify our route in test.py:
+	response = requests.put(BASE + 'helloworld/Michael',{'subs': 1000})
+
+-If you run our server and request file, your terminal for server will print the json we put.
+
+
