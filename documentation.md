@@ -109,3 +109,19 @@ if our Api works, try adding the ff. on your HelloWorld()/main.py:
 -If you run our server and request file, your terminal for server will print the json we put.
 
 
+9. Request Parser (reqparse)
+-reqparse - built-in flask_restful function for request parsing, from the name itself. Just 
+import it in flask_restful: from flask_restful import Api,Resource, reqparse
+
+-reqparse.RequestParser() - allows us to parse trhough the data as long as the requirements 
+of the object/JSON is satisfied
+
+-Lets say we had a simple dictionary which simulates the db
+	peep_put_args = reqparse.RequestParser()
+
+-To add an argument and its specs:
+	peep_put_args.add_argument('name',type=str,help='Peep Name') # adding an arg & its specs
+
+-The sequence for add_argument() kwargs are; key,type,help='like an error message'
+
+-If we send incopmplete args, this might happen:{'name': None, 'married': None}
