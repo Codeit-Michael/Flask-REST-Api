@@ -62,9 +62,7 @@ Note: Make sure you installed the ff. requirements
 
 -Next is create a test.py file for testing our api:
 	import requests
-
 	BASE = "http//127.0.0.1:5000/"		# getting the base / main home of our localhost
-	
 	response = requests.get(BASE + '')	# declaring to get the action, with home & extra link
 	print(response.json())				# calling it
 
@@ -125,3 +123,8 @@ of the object/JSON is satisfied
 -The sequence for add_argument() kwargs are; key,type,help='like an error message'
 
 -If we send incopmplete args, this might happen:{'name': None, 'married': None}
+
+-Taking and loading the args to work with it using:
+	def put(self,name):
+		my_args = peep_put_args.parse_args()	# it takes the following arg reqs
+		return {name: my_args}
