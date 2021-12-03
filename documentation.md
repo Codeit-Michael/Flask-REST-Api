@@ -128,3 +128,8 @@ of the object/JSON is satisfied
 	def put(self,name):
 		my_args = peep_put_args.parse_args()	# it takes the following arg reqs
 		return {name: my_args}
+
+-If you run it with incomplete data, it won't crash because we didn't set it to be required 
+unless we did, just add required=True in our chosen add_argument:
+	peep_put_args.add_argument('age',type=int,help='Peep\'s Age',required=True)
+	# if we didn't meet the requirement it, will crash and the message will pop on the screen

@@ -16,8 +16,8 @@ api = Api(app)
 # 	return(peep)
 
 peep_put_args = reqparse.RequestParser()						# args for object
-peep_put_args.add_argument('age',type=int,help='Peep\'s Age')	# adding an arg & its specs
-peep_put_args.add_argument('message',type=str,help='Peep\'s Marital status')
+peep_put_args.add_argument('age',type=int,help='Peep\'s Age',required=True)	# adding an arg & its specs
+peep_put_args.add_argument('greet',default=False,type=str,help='Peep\'s greet',required=True)
 
 peep = {}
 
