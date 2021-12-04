@@ -68,9 +68,7 @@ Note: Make sure you installed the ff. requirements
 
 -After it, run the two pyfiles; the main.py and the test.py:
 	-you will see, our test.py wwill get what it want.
--You can also use other request methods such as post or delete, just make sure you had a 
-function for that type of request method. To access other functions, replace/put the "get" 
-method in response = requests.get(BASE + 'helloworld') to another name of function.
+-You can also use other request methods such as post or delete, just make sure you had a function for that type of request method. To access other functions, replace/put the "get" method in response = requests.get(BASE + 'helloworld') to another name of function.
 
 
 7. Putting parameters on our Api
@@ -88,15 +86,12 @@ method in response = requests.get(BASE + 'helloworld') to another name of functi
 
 
 8. Storing data through Api
--Lets add requests on our api. Lets say on our test.py, where our actions are in, has 
-parameters. Take note; to put some argument on our request file test.py, simply:
+-Lets add requests on our api. Lets say on our test.py, where our actions are in, has parameters. Take note; to put some argument on our request file test.py, simply:
 	response = requests.put(BASE + 'helloworld/Michael',{'subs': 1000})	# requests = argument
 
--To access the request/arguments inside the engine, we need to use the 'request' from the 
-flask module. So import it: from flask import Flask,request
+-To access the request/arguments inside the engine, we need to use the 'request' from the flask module. So import it: from flask import Flask,request
 
--In order to get the requests, we are going to use the put() to get the json we sent. To see 
-if our Api works, try adding the ff. on your HelloWorld()/main.py:
+-In order to get the requests, we are going to use the put() to get the json we sent. To see if our Api works, try adding the ff. on your HelloWorld()/main.py:
 	def put(self,name):
 		print(request.form['subs'])
 		return {}
@@ -108,11 +103,9 @@ if our Api works, try adding the ff. on your HelloWorld()/main.py:
 
 
 9. Request Parser (reqparse)
--reqparse - built-in flask_restful function for request parsing, from the name itself. Just 
-import it in flask_restful: from flask_restful import Api,Resource, reqparse
+-reqparse - built-in flask_restful function for request parsing, from the name itself. Just import it in flask_restful: from flask_restful import Api,Resource, reqparse
 
--reqparse.RequestParser() - allows us to parse trhough the data as long as the requirements 
-of the object/JSON is satisfied
+-reqparse.RequestParser() - allows us to parse trhough the data as long as the requirements of the object/JSON is satisfied
 
 -Lets say we had a simple dictionary which simulates the db
 	peep_put_args = reqparse.RequestParser()
@@ -129,7 +122,12 @@ of the object/JSON is satisfied
 		my_args = peep_put_args.parse_args()	# it takes the following arg reqs
 		return {name: my_args}
 
--If you run it with incomplete data, it won't crash because we didn't set it to be required 
-unless we did, just add required=True in our chosen add_argument:
+-If you run it with incomplete data, it won't crash because we didn't set it to be required unless we did, just add required=True in our chosen add_argument:
 	peep_put_args.add_argument('age',type=int,help='Peep\'s Age',required=True)
 	# if we didn't meet the requirement it, will crash and the message will pop on the screen
+
+-Adding objects on db (for now, let's just use the dictionary as db which is named 'peep'). Let's also add http status code for actions we did. For now, let's add 201 because it means created:
+	def put(self,name):
+		my_attrs = peep_put_args.parse_args()	# it takes the ff. peep_put_args's arg reqs
+		peep[name] = my_attrs	# adding objects
+		return peep[name], 201	# add http status code for the changes you did

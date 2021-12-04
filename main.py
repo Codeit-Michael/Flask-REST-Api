@@ -23,11 +23,12 @@ peep = {}
 
 class HelloWorld(Resource):
 	def get(self,name):
-		return(peep[name])
+		return {name:peep[name]}
 
 	def put(self,name):
-		my_args = peep_put_args.parse_args()	# it takes the ff. peep_put_args's arg reqs
-		return {name: my_args}
+		my_attrs = peep_put_args.parse_args()	# it takes the ff. peep_put_args's arg reqs
+		peep[name] = my_attrs	# adding objects
+		return peep[name], 201	# add http status code for the changes you did
 
 # Registering it in our api, just like the django urls
 api.add_resource(HelloWorld, '/helloworld/<string:name>')
