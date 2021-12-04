@@ -131,3 +131,24 @@ Note: Make sure you installed the ff. requirements
 		my_attrs = peep_put_args.parse_args()	# it takes the ff. peep_put_args's arg reqs
 		peep[name] = my_attrs	# adding objects
 		return peep[name], 201	# add http status code for the changes you did
+
+
+10. Validating requests
+-If the name (the key object) is not in db/dict, we can abort finding an object with that key, we can avoid getting errors by retutrning abort():
+	def cancel_request(name):
+		if name not in peep:
+			abort(404,message='Peep name could not found...')
+
+-This is useful when you're using get(), and you can use this function in our get() or move the code
+
+-As you can see, all of the posibilites we create we put http status code or else we will get an error.
+
+-We can also do reverse in put() if the name already exists by adding;
+	if name in peep: and then the condition
+
+
+11. Making Delete()
+	def delete(self,name):
+		cancel_get_request(name)
+		del peep[name]
+		return '',204	# Leave the message blank
