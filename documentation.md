@@ -152,3 +152,24 @@ Note: Make sure you installed the ff. requirements
 		cancel_get_request(name)
 		del peep[name]
 		return '',204	# Leave the message blank
+
+
+12. Installing database dependancy
+-On command line/terminal: pip3 install flask_sqlalchemy
+
+
+13. Db Configuration
+-Import first the module we installed: from flask_sqlalchemy import SQLAlchemy
+
+-Next at the bottom part of api wrapping config, add:
+	app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db' # to name the db database.db
+	db = SQLAlchemy(app) # wrapping up
+
+-Let's say we want to store the db inside a folder called 'tmp', edit app.config and add 'tmp/' on the dir:
+	app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tmp/database.db'
+
+-To initialize the db, run:
+	db.create_all()
+-Run this code once because it may overwrite your whole db if you did twice or more. 
+
+-Before initializing the db, let's add models first, where we store objects (peep):

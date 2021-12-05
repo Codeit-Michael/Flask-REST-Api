@@ -1,19 +1,12 @@
 from flask import Flask,request
 from flask_restful import Api,Resource, reqparse, abort
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-api = Api(app)
-
-# peep = {
-# 	'Michael': {'age': 18, 'student': True},
-# 	'Tim': {'age': 25, 'student': False},
-# }
-
-# peep = {}
-
-# @app.route('/')
-# def getTodos():
-# 	return(peep)
+api = Api(app) # wrapping up
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db' # to name the db database.db
+db = SQLAlchemy(app) # wrapping up
+db.create_all()
 
 peep_put_args = reqparse.RequestParser()	# args for object
 peep_put_args.add_argument('age',type=int,help='Peep\'s Age',required=True)	# adding an arg & its specs
