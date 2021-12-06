@@ -1,5 +1,5 @@
 from flask import Flask,request
-from flask_restful import Api,Resource, reqparse, abort
+from flask_restful import Api,Resource, reqparse, abort, fields, marshal_with
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -7,12 +7,8 @@ api = Api(app) # wrapping up
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db' # to name the db database.db
 db = SQLAlchemy(app) # wrapping up
 
-peep_put_args = reqparse.RequestParser()	# args for object
-peep_put_args.add_argument('age',type=int,help='Peep\'s Age',required=True)	# adding an arg & its specs
-peep_put_args.add_argument('greet',default=False,type=str,help='Peep\'s greet',required=True)
-
 class PeepModel(db.Model):
-	name = db.Column(db.String(50),primary_key=True)
+	fname = db.Column(db.String(50),primary_key=True)
 	surname = db.Column(db.String(50),primary_key=True)
 	age = db.Column(db.Integer,nullable=False)
 
@@ -21,10 +17,22 @@ class PeepModel(db.Model):
 
 # db.create_all() # delete/comment out after you're done
 
+peep_put_args = reqparse.RequestParser()	# args for object
+# peep_put_args.add_argument('fname',default=False,type=str,help='Peep\'s firstname',required=True)
+peep_put_args.add_argument('surname',default=False,type=str,help='Peep\'s surname',required=True)
+peep_put_args.add_argument('age',type=int,help='Peep\'s Age',required=True)	# adding an arg & its specs
+
+resource_fields = {
+	'fname': db.String,
+	'surname': db.String,
+	'age': db.Integer
+}
+
 class HelloWorld(Resource):
+	@marshal_with(resource_fields)
 	def get(self,name):
-		cancel_get_request(name)
-		return {name:peep[name]}
+		result = PeepModel.query.get(fname=name)
+		return result
 
 	def put(self,name):
 		cancel_put_request(name)

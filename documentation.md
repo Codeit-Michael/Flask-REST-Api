@@ -191,4 +191,27 @@ Note: Make sure you installed the ff. requirements
 -And now you were ready to configure our db. To do that, just run your py file and once you're done, delete the line 'db.create_all()' or it will override your db next time.
 
 
-15. 
+15. Data Querying and serializing objects (to be readable as JSON)
+-Edit our code get() for querying to the db:
+	def get(self,name):
+		result = PeepModel.query.get(fname=name)
+		return result
+
+-Now what it will return is an instance and not a JSON because remember what we add on our PeepModel; the repr(). So what we will do now is to serialize the instance it return into objects. Let's start by importing 'fields' and 'marshal_with' from flask restful so our import from this module are:
+	from flask_restful import Api,Resource,reqparse,abort,fields,marshal_with
+
+-Next is to add 'resource_fields'. It is the reference of data/objects we broke down to be a JSON, so add:
+	resource_fields = {
+		'fname': db.String,
+		'surname': db.String,
+		'age': db.Integer
+	}
+
+-To apply the resource_fields object ditrib classification when were querying data on db, at the top of our get() in HelloWorld, type:
+	@marshal_with(resource_fields)
+
+-So our get() in class HelloWorld looks like this:
+		@marshal_with(resource_fields)
+		def get(self,name):
+			result = PeepModel.query.get(fname=name)
+			return result
