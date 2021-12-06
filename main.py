@@ -6,21 +6,20 @@ app = Flask(__name__)
 api = Api(app) # wrapping up
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db' # to name the db database.db
 db = SQLAlchemy(app) # wrapping up
-db.create_all()
 
 peep_put_args = reqparse.RequestParser()	# args for object
 peep_put_args.add_argument('age',type=int,help='Peep\'s Age',required=True)	# adding an arg & its specs
 peep_put_args.add_argument('greet',default=False,type=str,help='Peep\'s greet',required=True)
 
-peep = {}
+class PeepModel(db.Model):
+	name = db.Column(db.String(50),primary_key=True)
+	surname = db.Column(db.String(50),primary_key=True)
+	age = db.Column(db.Integer,nullable=False)
 
-def cancel_get_request(name):
-	if name not in peep:
-		abort(404,message='Peep name could not found...')
+	def __repr__(self):
+		return f'(name={name},surname={surname},age={age})' # data representation
 
-def cancel_put_request(name):
-	if name in peep:
-		abort(403,message='Peep name already exist...')
+# db.create_all() # delete/comment out after you're done
 
 class HelloWorld(Resource):
 	def get(self,name):

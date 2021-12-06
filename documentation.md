@@ -172,4 +172,23 @@ Note: Make sure you installed the ff. requirements
 	db.create_all()
 -Run this code once because it may overwrite your whole db if you did twice or more. 
 
--Before initializing the db, let's add models first, where we store objects (peep):
+-Before initializing the db, let's add models first, where we store objects (peep)
+
+
+14. Creating a model
+<!-- 
+ 	class PeepModel(db.Model):
+		name = db.Column(db.String(50),primary_key=True)
+		surname = db.Column(db.String(50),primary_key=True)
+		age = db.Column(db.Integer,nullable=False)
+
+		def __repr__(self):
+			return f'(name={name},surname={surname},age={age})' # data representation
+
+	db.create_all()
+ -->
+
+-And now you were ready to configure our db. To do that, just run your py file and once you're done, delete the line 'db.create_all()' or it will override your db next time.
+
+
+15. 
