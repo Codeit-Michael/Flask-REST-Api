@@ -23,7 +23,7 @@ peep_put_args.add_argument('surname',default=False,type=str,help='Peep\'s surnam
 peep_put_args.add_argument('age',type=int,help='Peep\'s Age',required=True)	# adding an arg & its specs
 
 resource_fields = {
-	'fname': db.String,
+	'fname': db.String, 
 	'surname': db.String,
 	'age': db.Integer
 }
@@ -31,14 +31,19 @@ resource_fields = {
 class HelloWorld(Resource):
 	@marshal_with(resource_fields)
 	def get(self,name):
-		result = PeepModel.query.get(fname=name)
+		result = PeepModel.query.filter_by(fname=name).first()
 		return result
 
+	@marshal_with(resource_fields)
 	def put(self,name):
-		cancel_put_request(name)
 		my_attrs = peep_put_args.parse_args()	# it takes the ff. peep_put_args's arg reqs
-		peep[name] = my_attrs	# adding objects
-		return peep[name],201	# add http status code for the changes you did
+		result = PeepModel.query.filter_by(fname=name).first()
+		if result:
+			abort(409,f'User {name} already taken...')
+		peep = PeepModel(fname=name,surname=my_attrs['surname'],age=my_attrs['age'])
+		db.session.add(peep)
+		db.session.commit()
+		return peep,201	# add http status code for the changes you did
 
 	def delete(self,name):
 		cancel_get_request(name)

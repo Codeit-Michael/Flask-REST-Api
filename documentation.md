@@ -213,5 +213,7 @@ Note: Make sure you installed the ff. requirements
 -So our get() in class HelloWorld looks like this:
 		@marshal_with(resource_fields)
 		def get(self,name):
-			result = PeepModel.query.get(fname=name)
+			result = PeepModel.query.filter_by(fname=name).first()
 			return result
+			
+-The filter_by() used it filters all the object with that attribute and first() used to return the first/main object it has.
