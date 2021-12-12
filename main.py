@@ -8,8 +8,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db' # to name the db
 db = SQLAlchemy(app) # wrapping up
 
 class PeepModel(db.Model):
-	fname = db.Column(db.String(50),primary_key=True)
-	surname = db.Column(db.String(50),primary_key=True)
+	id = db.Column(db.Integer,primary_key=True)
+	name = db.Column(db.String(50),nullable=True)
 	age = db.Column(db.Integer,nullable=False)
 
 	def __repr__(self):
@@ -19,39 +19,43 @@ class PeepModel(db.Model):
 
 peep_put_args = reqparse.RequestParser()	# args for object
 # peep_put_args.add_argument('fname',default=False,type=str,help='Peep\'s firstname',required=True)
-peep_put_args.add_argument('surname',default=False,type=str,help='Peep\'s surname',required=True)
+peep_put_args.add_argument('name',default=False,type=str,help='Peep\'s surname',required=True)
 peep_put_args.add_argument('age',type=int,help='Peep\'s Age',required=True)	# adding an arg & its specs
 
 resource_fields = {
-	'fname': db.String, 
-	'surname': db.String,
+	'id': db.Integer, 
+	'name': db.String,
 	'age': db.Integer
 }
+"""
+REWRITE EVERYTHING!!!
+"""
 
 class HelloWorld(Resource):
 	@marshal_with(resource_fields)
-	def get(self,name):
-		result = PeepModel.query.filter_by(fname=name).first()
+	def get(self,peep_id):
+		result = PeepModel.query.filter_by(id=peep_id).first()
 		return result
 
 	@marshal_with(resource_fields)
-	def put(self,name):
+	def put(self,peep_id):
 		my_attrs = peep_put_args.parse_args()	# it takes the ff. peep_put_args's arg reqs
-		result = PeepModel.query.filter_by(fname=name).first()
+		result = PeepModel.query.filter_by(id=peep_id).first()
 		if result:
 			abort(409,f'User {name} already taken...')
-		peep = PeepModel(fname=name,surname=my_attrs['surname'],age=my_attrs['age'])
+		peep = PeepModel(id=peep_id,name=my_attrs['name'],age=my_attrs['age'])
 		db.session.add(peep)
 		db.session.commit()
+		print('bobo')
 		return peep,201	# add http status code for the changes you did
 
-	def delete(self,name):
-		cancel_get_request(name)
+	def delete(self,peep_id):
+		cancel_get_request(peep_id)
 		del peep[name]
 		return '',204	# Leave the message blank
 
 # Registering it in our api, just like the django urls
-api.add_resource(HelloWorld, '/helloworld/<string:name>')
+api.add_resource(HelloWorld, '/helloworld/<int:peep_id>')
 
 if __name__ == '__main__':
 	app.run(debug=True)
