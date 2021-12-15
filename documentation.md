@@ -217,3 +217,26 @@ Note: Make sure you installed the ff. requirements
 			return result
 			
 -The filter_by() used it filters all the object with that attribute and first() used to return the first/main object it has.
+
+
+16. Update objects
+-We update an object through patch(). First, let's make its own args which is not required with all fields so we can just update what object field we want to update:
+	peep_patch_args = reqparse.RequestParser()
+	peep_patch_args.add_argument('name',default=False,type=str,help='Peep\'s name')
+	peep_patch_args.add_argument('age',type=int,help='Peep\'s Age')
+
+-Next, let's add the patch() on our HelloWorld():
+	@marshal_with(resource_fields)
+	def patch(self,peep_id):
+		args = peep_patch_args.parse_args()
+		result = PeepModel.query.filter_by(id=peep_id).first()
+		if not result:
+			abort(404, message="Peep doesn't exist, cannot update")
+		if args['name']:
+			result.name = args['name']
+		if args['age']:
+			result.views = args['age']
+		db.session.commit()
+		return result
+
+-Now as we see here, we just .commit() it and not .add() because in flask rest, once an object is in db, you don't need to .add() it again and just commit it.

@@ -21,14 +21,15 @@ peep_put_args = reqparse.RequestParser()	# args for object
 peep_put_args.add_argument('name',default=False,type=str,help='Peep\'s name',required=True)
 peep_put_args.add_argument('age',type=int,help='Peep\'s Age',required=True)	# adding an arg & its specs
 
+peep_patch_args = reqparse.RequestParser()
+peep_patch_args.add_argument('name',default=False,type=str,help='Peep\'s name')
+peep_patch_args.add_argument('age',type=int,help='Peep\'s Age')
+
 resource_fields = {
 	'id': fields.Integer, 
 	'name': fields.String,
 	'age': fields.Integer
 }
-"""
-REWRITE EVERYTHING!!!
-"""
 
 class HelloWorld(Resource):
 	@marshal_with(resource_fields)
@@ -48,6 +49,19 @@ class HelloWorld(Resource):
 		db.session.add(peep)
 		db.session.commit()
 		return peep,201	# add http status code for the changes you did
+
+	@marshal_with(resource_fields)
+	def patch(self,peep_id):
+		args = peep_patch_args.parse_args()
+		result = PeepModel.query.filter_by(id=peep_id).first()
+		if not result:
+			abort(404, message="Peep doesn't exist, cannot update")
+		if args['name']:
+			result.name = args['name']
+		if args['age']:
+			result.views = args['age']
+		db.session.commit()
+		return result
 
 	def delete(self,peep_id):
 		cancel_get_request(peep_id)
